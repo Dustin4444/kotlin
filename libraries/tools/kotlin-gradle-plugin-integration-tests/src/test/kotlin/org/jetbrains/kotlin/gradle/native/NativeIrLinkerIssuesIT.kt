@@ -246,6 +246,7 @@ internal class NativeIrLinkerIssuesIT : KGPBaseTest() {
         localRepo: Path,
         expectedErrorMessage: () -> String,
     ) {
+
         buildAndPublishLibrary(directoryPrefix = directoryPrefix, projectName = "liba-v1.0", localRepo = localRepo, gradleVersion)
         buildAndPublishLibrary(directoryPrefix = directoryPrefix, projectName = "liba-v2.0", localRepo = localRepo, gradleVersion)
         buildAndPublishLibrary(directoryPrefix = directoryPrefix, projectName = "libb", localRepo = localRepo, gradleVersion)
