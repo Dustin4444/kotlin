@@ -56,7 +56,7 @@ sealed class JsIrBinary(
 
     val validateGeneratedTsTaskName: String = validateTypeScriptTaskName()
 
-    @Deprecated("Use generateTypeScriptDefinitions() instead", ReplaceWith("generateTypeScriptDefinitions()"))
+    @Deprecated("No longer used. To enable TypeScript definitiions use generateTypeScriptDefinitions() in the Kotlin JS target instead. Scheduled for removal in Kotlin 2.4.")
     var generateTs: Boolean = false
 
     val outputDirBase: Provider<Directory> = project.layout.buildDirectory
