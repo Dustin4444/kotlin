@@ -78,7 +78,7 @@ class VariableFixationFinder(
     enum class TypeVariableFixationReadiness {
         FORBIDDEN,
         WITHOUT_PROPER_ARGUMENT_CONSTRAINT, // proper constraint from arguments -- not from upper bound for type parameters
-        OUTER_TYPE_VARIABLE_DEPENDENCY,
+        OUTER_TYPE_VARIABLE_DEPENDENCY, // PCLA-only readiness
 
         // This is used for self-type-based bounds and deprioritized in 1.5+.
         // 2.2+ uses this kind of readiness for reified type parameters only, otherwise
@@ -227,7 +227,7 @@ class VariableFixationFinder(
     }
 
     private fun Context.computeReadinessForVariableWithDependencies(typeVariable: TypeConstructorMarker): TypeVariableFixationReadiness {
-        return if (!languageVersionSettings.supportsFeature(LanguageFeature.PreferDependentTypeVariablesWithProperArgumentConstraint) ||
+        return if (!languageVersionSettings.supportsFeature(LanguageFeature.FixationEnhancementsIn22) ||
             !hasProperArgumentConstraint(typeVariable)
         ) {
             TypeVariableFixationReadiness.WITH_COMPLEX_DEPENDENCY
