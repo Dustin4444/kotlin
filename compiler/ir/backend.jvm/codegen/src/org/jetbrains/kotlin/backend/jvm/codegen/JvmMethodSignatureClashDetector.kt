@@ -10,13 +10,10 @@ import org.jetbrains.kotlin.backend.jvm.JvmLoweredDeclarationOrigin
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
 import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactory1
 import org.jetbrains.kotlin.ir.IrDiagnosticReporter
-import org.jetbrains.kotlin.ir.declarations.IrDeclaration
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.descriptors.toIrBasedDescriptor
 import org.jetbrains.kotlin.ir.linkage.SignatureClashDetector
-import org.jetbrains.kotlin.ir.util.isFakeOverride
+import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.ConflictingJvmDeclarationsData
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmBackendErrors
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.MemberKind
@@ -27,12 +24,19 @@ class JvmMethodSignatureClashDetector(
 ) : SignatureClashDetector<RawSignature, IrFunction>() {
 
     fun trackFakeOverrideMethod(irFunction: IrFunction) {
-        if (irFunction.dispatchReceiverParameter != null) {
-            for (overriddenFunction in getOverriddenFunctions(irFunction as IrSimpleFunction)) {
-                if (!overriddenFunction.isFakeOverride) trackDeclaration(irFunction, mapRawSignature(overriddenFunction))
-            }
+        irFunction.forEachOverriddenNotFake { overriddenFunction ->
+            trackDeclaration(irFunction, mapRawSignature(overriddenFunction))
+        }
+    }
+
+    private inline fun IrFunction.forEachOverriddenNotFake(action: (IrFunction) -> Unit) {
+        if (origin != IrDeclarationOrigin.FAKE_OVERRIDE) return
+        if (dispatchReceiverParameter == null) {
+            action(this)
         } else {
-            trackDeclaration(irFunction, mapRawSignature(irFunction))
+            for (overriddenFunction in getOverriddenFunctions(this as IrSimpleFunction)) {
+                if (!overriddenFunction.isFakeOverride) action(overriddenFunction)
+            }
         }
     }
 
@@ -77,15 +81,33 @@ class JvmMethodSignatureClashDetector(
 
         val conflictingJvmDeclarationsData = getConflictingJvmDeclarationsData(signature, declarations)
 
+        fun reportConflictingInheritedDeclarations() {
+            reportJvmSignatureClash(
+                diagnosticReporter,
+                JvmBackendErrors.CONFLICTING_INHERITED_JVM_DECLARATIONS,
+                listOf(classCodegen.irClass),
+                conflictingJvmDeclarationsData
+            )
+        }
+
         when {
+            realMethodsCount == 0 && fakeOverridesCount == 1 && specialOverridesCount == 1 -> {
+                val fakeOverride = declarations.first { it.isFakeOverride }
+                val bridge = declarations.first { it.isSpecialOverride() }
+                if (bridge.origin != IrDeclarationOrigin.BRIDGE) return
+                val overriddenByOriginalBridge =
+                    getOverriddenFunctions(bridge.originalFunction as? IrSimpleFunction ?: return)
+                fakeOverride.forEachOverriddenNotFake {
+                    if (mapRawSignature(it) == signature && !overriddenByOriginalBridge.contains(it) && it == it.originalFunction) {
+                        reportConflictingInheritedDeclarations()
+                        return
+                    }
+                }
+            }
+
             realMethodsCount == 0 && (fakeOverridesCount > 1 || specialOverridesCount > 1) ->
                 if (classCodegen.irClass.origin != JvmLoweredDeclarationOrigin.DEFAULT_IMPLS) {
-                    reportJvmSignatureClash(
-                        diagnosticReporter,
-                        JvmBackendErrors.CONFLICTING_INHERITED_JVM_DECLARATIONS,
-                        listOf(classCodegen.irClass),
-                        conflictingJvmDeclarationsData
-                    )
+                    reportConflictingInheritedDeclarations()
                 }
 
             fakeOverridesCount == 0 && specialOverridesCount == 0 -> {
