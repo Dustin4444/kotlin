@@ -25,11 +25,13 @@ class FirContractCallBlock(var call: FirFunctionCall) : FirBlock() {
     override val statements: List<FirStatement>
         get() = listOf(call)
 
-
     override var annotations: MutableOrEmptyList<FirAnnotation> = MutableOrEmptyList.empty()
 
     @UnresolvedExpressionTypeAccess
     override var coneTypeOrNull: ConeKotlinType? = null
+
+    override val hasImplicitReturn: Boolean
+        get() = false
 
     override fun <R, D> acceptChildren(visitor: FirVisitor<R, D>, data: D) {
         call.accept(visitor, data)
@@ -63,5 +65,6 @@ class FirContractCallBlock(var call: FirFunctionCall) : FirBlock() {
         return this
     }
 
-
+    override fun replaceHasImplicitReturn(newHasImplicitReturn: Boolean) {
+    }
 }

@@ -56,8 +56,8 @@ fun testWhen() {
     }
 
     consume {
-        <!NO_ELSE_IN_WHEN!>when<!> (a) {
-            "" -> ""
+        when (a) {
+            "" -> <!UNUSED_EXPRESSION!>""<!>
         }
     }
 }
@@ -107,7 +107,7 @@ fun testLambda() {
 
     run {
         <!UNUSED_EXPRESSION!>""<!>
-        Unit // actually unused
+        <!UNUSED_EXPRESSION!>Unit<!> // actually unused
     }
 
     consume {
@@ -126,6 +126,6 @@ fun testLambda() {
 
     consume<Unit> {
         <!UNUSED_EXPRESSION!>""<!>
-        Unit // actually unused
+        <!UNUSED_EXPRESSION!>Unit<!> // actually unused
     }
 }

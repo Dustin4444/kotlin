@@ -28,6 +28,8 @@ class FirEmptyExpressionBlock : FirBlock() {
         get() = emptyList()
     override val statements: List<FirStatement>
         get() = emptyList()
+    override val hasImplicitReturn: Boolean
+        get() = false
 
     override fun <R, D> acceptChildren(visitor: FirVisitor<R, D>, data: D) {}
 
@@ -53,4 +55,6 @@ class FirEmptyExpressionBlock : FirBlock() {
     }
 
     override fun replaceAnnotations(newAnnotations: List<FirAnnotation>) {}
+
+    override fun replaceHasImplicitReturn(newHasImplicitReturn: Boolean) {}
 }

@@ -23,6 +23,7 @@ abstract class FirBlock : FirExpression() {
     abstract override val coneTypeOrNull: ConeKotlinType?
     abstract override val annotations: List<FirAnnotation>
     abstract val statements: List<FirStatement>
+    abstract val hasImplicitReturn: Boolean
 
     override fun <R, D> accept(visitor: FirVisitor<R, D>, data: D): R =
         visitor.visitBlock(this, data)
@@ -34,6 +35,8 @@ abstract class FirBlock : FirExpression() {
     abstract override fun replaceConeTypeOrNull(newConeTypeOrNull: ConeKotlinType?)
 
     abstract override fun replaceAnnotations(newAnnotations: List<FirAnnotation>)
+
+    abstract fun replaceHasImplicitReturn(newHasImplicitReturn: Boolean)
 
     abstract override fun <D> transformAnnotations(transformer: FirTransformer<D>, data: D): FirBlock
 

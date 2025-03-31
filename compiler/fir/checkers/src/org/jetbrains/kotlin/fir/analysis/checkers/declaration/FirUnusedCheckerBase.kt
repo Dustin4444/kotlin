@@ -36,6 +36,7 @@ import org.jetbrains.kotlin.fir.expressions.FirTryExpression
 import org.jetbrains.kotlin.fir.expressions.FirWhenExpression
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.impl.FirContractCallBlock
+import org.jetbrains.kotlin.fir.expressions.isExhaustive
 import org.jetbrains.kotlin.fir.references.symbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
@@ -123,7 +124,7 @@ abstract class FirUnusedCheckerBase : FirBasicDeclarationChecker(MppCheckerKind.
             }
             for (branch in whenExpression.branches) {
                 branch.condition.accept(this, UsageState.Used)
-                branch.result.accept(this, data)
+                branch.result.accept(this, if (whenExpression.isExhaustive) data else UsageState.Unused)
             }
         }
 
@@ -145,9 +146,7 @@ abstract class FirUnusedCheckerBase : FirBasicDeclarationChecker(MppCheckerKind.
             val lastIndex = statements.lastIndex
             for (i in statements.indices) {
                 val statement = statements[i]
-                val isImplicitReturn = i == lastIndex &&
-                        statement is FirExpression &&
-                        statement.resolvedType.isSubtypeOf(block.resolvedType, context.session)
+                val isImplicitReturn = i == lastIndex && block.hasImplicitReturn
                 statement.accept(this, if (isImplicitReturn) data else UsageState.Unused)
             }
         }

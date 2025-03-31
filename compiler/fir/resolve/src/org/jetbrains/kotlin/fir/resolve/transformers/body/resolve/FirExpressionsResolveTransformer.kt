@@ -771,6 +771,7 @@ open class FirExpressionsResolveTransformer(transformer: FirAbstractBodyResolveT
         } else {
             // Bottom-up propagation: from the return type of the last expression in the block to the block type
             block.writeResultType(session)
+            block.replaceHasImplicitReturn(true)
         }
 
         dataFlowAnalyzer.exitBlock(block)

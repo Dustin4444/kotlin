@@ -30,6 +30,7 @@ internal class FirBlockImpl(
     override var annotations: MutableOrEmptyList<FirAnnotation>,
     override val statements: MutableList<FirStatement>,
 ) : FirBlock() {
+    override var hasImplicitReturn: Boolean = false
 
     override fun <R, D> acceptChildren(visitor: FirVisitor<R, D>, data: D) {
         annotations.forEach { it.accept(visitor, data) }
@@ -63,5 +64,9 @@ internal class FirBlockImpl(
 
     override fun replaceAnnotations(newAnnotations: List<FirAnnotation>) {
         annotations = newAnnotations.toMutableOrEmpty()
+    }
+
+    override fun replaceHasImplicitReturn(newHasImplicitReturn: Boolean) {
+        hasImplicitReturn = newHasImplicitReturn
     }
 }
