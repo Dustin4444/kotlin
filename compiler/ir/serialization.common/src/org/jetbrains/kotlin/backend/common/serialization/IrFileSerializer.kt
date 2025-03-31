@@ -1517,20 +1517,21 @@ open class IrFileSerializer(
             proto.addDeclarationId(serializedDeclaration.id)
         }
 
-        val preprocessedInlineFunctions = originalToPreprocessedInlineFunctions.map { (originalInlineFunction, preprocessedInlineFunction) ->
-            val originalIdSignature = declarationTable.signatureByDeclaration(
-                originalInlineFunction,
-                settings.compatibilityMode.legacySignaturesForPrivateAndLocalDeclarations,
-                recordInSignatureClashDetector = false
-            )
-            val originalSigIndex = protoIdSignatureMap[originalIdSignature]
-                ?: error("Not found ID for $originalIdSignature (${originalInlineFunction.render()})")
-            proto.addOriginalToPreprocessedInlineFunctions(originalSigIndex)
+        val preprocessedInlineFunctions =
+            originalToPreprocessedInlineFunctions.map { (originalInlineFunction, preprocessedInlineFunction) ->
+                val originalIdSignature = declarationTable.signatureByDeclaration(
+                    originalInlineFunction,
+                    settings.compatibilityMode.legacySignaturesForPrivateAndLocalDeclarations,
+                    recordInSignatureClashDetector = false
+                )
+                val originalSigIndex = protoIdSignatureMap[originalIdSignature]
+                    ?: error("Not found ID for $originalIdSignature (${originalInlineFunction.render()})")
+                proto.addOriginalToPreprocessedInlineFunctions(originalSigIndex)
 
-            val serializedPreprocessedInlineFunction = serializeTopLevelDeclaration(preprocessedInlineFunction)
-            proto.addOriginalToPreprocessedInlineFunctions(serializedPreprocessedInlineFunction.id)
-            serializedPreprocessedInlineFunction
-        }
+                val serializedPreprocessedInlineFunction = serializeTopLevelDeclaration(preprocessedInlineFunction)
+                proto.addOriginalToPreprocessedInlineFunctions(serializedPreprocessedInlineFunction.id)
+                serializedPreprocessedInlineFunction
+            }
 
         val includeLineStartOffsets = !(settings.publicAbiOnly && protoBodyArray.isEmpty())
         if (settings.abiCompatibilityLevel.isAtLeast(ABI_LEVEL_2_2)) {

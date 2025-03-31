@@ -261,6 +261,7 @@ private object IrTranslationResultValueExternalizer : DataExternalizer<IrTransla
         output.writeArray(value.signatures)
         output.writeArray(value.strings)
         output.writeArray(value.declarations)
+        output.writeArray(value.inlineDeclarations)
         output.writeArray(value.bodies)
         output.writeArray(value.fqn)
         output.writeArray(value.fileMetadata)
@@ -335,6 +336,7 @@ private class IrTranslationResultMap(
                 "Signatures: ${value.signatures.md5()}, " +
                 "Strings: ${value.strings.md5()}, " +
                 "Declarations: ${value.declarations.md5()}, " +
+                "Inline declarations: ${value.inlineDeclarations.md5()}, " +
                 "Bodies: ${value.bodies.md5()}"
 
     @Synchronized
