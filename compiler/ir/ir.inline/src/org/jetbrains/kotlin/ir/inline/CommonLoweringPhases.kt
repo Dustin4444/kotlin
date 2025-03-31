@@ -117,8 +117,8 @@ fun loweringsOfTheFirstPhase(
     @Suppress("UNUSED_PARAMETER") irMangler: IrMangler,
     languageVersionSettings: LanguageVersionSettings
 ): List<NamedCompilerPhase<PreSerializationLoweringContext, IrModuleFragment, IrModuleFragment>> = buildList {
+    this += avoidLocalFOsInInlineFunctionsLowering
     if (languageVersionSettings.supportsFeature(LanguageFeature.IrInlinerBeforeKlibSerialization)) {
-        this += avoidLocalFOsInInlineFunctionsLowering
         this += lateinitPhase
         this += sharedVariablesLoweringPhase
         this += localClassesInInlineLambdasPhase

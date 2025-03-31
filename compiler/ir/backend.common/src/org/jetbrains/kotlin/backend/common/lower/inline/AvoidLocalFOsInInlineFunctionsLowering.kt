@@ -17,12 +17,13 @@ import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrRichCallableReference
 import org.jetbrains.kotlin.ir.expressions.IrRichFunctionReference
 import org.jetbrains.kotlin.ir.expressions.IrRichPropertyReference
+import org.jetbrains.kotlin.ir.expressions.implicitCastTo
 import org.jetbrains.kotlin.ir.symbols.IrPropertySymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSymbol
+import org.jetbrains.kotlin.ir.util.getAllSubstitutedSupertypes
 import org.jetbrains.kotlin.ir.util.isLocal
-import org.jetbrains.kotlin.ir.util.parentClassOrNull
-import org.jetbrains.kotlin.ir.util.resolveFakeOverride
+import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.ir.visitors.IrVisitorVoid
 import org.jetbrains.kotlin.ir.visitors.acceptChildrenVoid
 import org.jetbrains.kotlin.ir.visitors.acceptVoid
@@ -63,8 +64,13 @@ class AvoidLocalFOsInInlineFunctionsLowering(val context: LoweringContext) : Bod
 
             override fun visitCall(expression: IrCall) {
                 val callee = expression.symbol.owner
-                findRealMemberIfThisIsLocalFO(callee)?.let {
-                    expression.symbol = it as IrSimpleFunctionSymbol
+                findOverriddenNonLocalFo(callee)?.let { newSymbol ->
+                    expression.symbol = newSymbol as IrSimpleFunctionSymbol
+                    newSymbol.owner.dispatchReceiverParameter?.let { dispatchParam ->
+                        val superClass = newSymbol.owner.parentAsClass
+                        val newDispatcherType = getAllSubstitutedSupertypes(callee.parentAsClass).first { it.classifier == superClass.symbol }
+                        expression.arguments[dispatchParam] = expression.arguments[dispatchParam]?.implicitCastTo(newDispatcherType)
+                    }
                 }
 
                 super.visitMemberAccess(expression)
@@ -74,7 +80,7 @@ class AvoidLocalFOsInInlineFunctionsLowering(val context: LoweringContext) : Bod
             // as those won't be found in functions inlined of the 1st stage, which is where the original problem appears.
             override fun visitRichCallableReference(expression: IrRichCallableReference<*>) {
                 val target = expression.reflectionTargetSymbol?.owner as? IrOverridableDeclaration<*> ?: return
-                findRealMemberIfThisIsLocalFO(target)?.let {
+                findOverriddenNonLocalFo(target)?.let {
                     when (expression) {
                         is IrRichFunctionReference -> expression.reflectionTargetSymbol = it as IrSimpleFunctionSymbol
                         is IrRichPropertyReference -> expression.reflectionTargetSymbol = it as IrPropertySymbol
@@ -84,11 +90,12 @@ class AvoidLocalFOsInInlineFunctionsLowering(val context: LoweringContext) : Bod
                 super.visitRichCallableReference(expression)
             }
 
-            private fun findRealMemberIfThisIsLocalFO(member: IrOverridableDeclaration<*>): IrSymbol? {
-                if (!member.isFakeOverride) return null
-                val clazz = member.parentClassOrNull ?: return null
-                if (!clazz.isLocal) return null
-                return member.resolveFakeOverride()?.symbol
+            private fun findOverriddenNonLocalFo(member: IrOverridableDeclaration<*>): IrSymbol? {
+                var properMember: IrOverridableDeclaration<*> = member
+                while (properMember.isLocal && properMember.isFakeOverride) {
+                    properMember = properMember.overriddenSymbols.getOrNull(0)?.owner as? IrOverridableDeclaration<*> ?: break
+                }
+                return if (properMember === member) null else properMember.symbol
             }
         })
     }
