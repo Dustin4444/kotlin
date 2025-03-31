@@ -43,8 +43,7 @@ object ComposableCallableReferenceChecker : FirCallableReferenceAccessChecker(Mp
         if (kind == ComposableFunction || kind == KComposableFunction) {
             reporter.reportOn(
                 expression.source,
-                ComposeErrors.COMPOSABLE_FUNCTION_REFERENCE,
-                context
+                ComposeErrors.COMPOSABLE_FUNCTION_REFERENCE
             )
         }
     }
