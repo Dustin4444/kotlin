@@ -57,8 +57,7 @@ internal fun CheckerContext.checkCompanionSerializerDependency(
             companionObjectSymbol.getSerializerAnnotation(session)?.source,
             FirSerializationErrors.COMPANION_OBJECT_SERIALIZER_INSIDE_OTHER_SERIALIZABLE_CLASS,
             classSymbol.defaultType(),
-            serializerForInCompanion.defaultType(),
-            context
+            serializerForInCompanion.defaultType()
         )
     }
 
@@ -92,8 +91,7 @@ internal fun CheckerContext.checkCompanionSerializerDependency(
                 companionObjectSymbol.getSerializerAnnotation(session)?.source,
                 FirSerializationErrors.COMPANION_OBJECT_SERIALIZER_INSIDE_NON_SERIALIZABLE_CLASS,
                 classSymbol.defaultType(),
-                serializerForInCompanion.defaultType(),
-                context
+                serializerForInCompanion.defaultType()
             )
         }
     }
