@@ -243,6 +243,7 @@ open class AbstractFirJsKlibSyntheticAccessorTest : AbstractFirJsTest(
         with(builder) {
             defaultDirectives {
                 +KlibBasedCompilerTestDirectives.DUMP_KLIB_SYNTHETIC_ACCESSORS
+                LANGUAGE with "+${LanguageFeature.IrInlinerBeforeKlibSerialization.name}"
             }
         }
     }

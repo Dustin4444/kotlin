@@ -281,6 +281,7 @@ fun main() {
             testClass<AbstractFirNativeKlibSyntheticAccessorTest>(
                 annotations = listOf(
                     *klibSyntheticAccessors(),
+                    klibIrInliner(),
                 )
             ) {
                 model(targetBackend = TargetBackend.NATIVE)
