@@ -1,5 +1,3 @@
-// TODO: Yes or no?
-//
 // IGNORE_ANALYSIS_SESSION_INVALIDATION
 
 // MODULE: unrelatedLibrary
