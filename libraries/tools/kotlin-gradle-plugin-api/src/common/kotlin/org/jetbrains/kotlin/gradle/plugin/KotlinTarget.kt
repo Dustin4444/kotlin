@@ -14,9 +14,6 @@ import org.gradle.api.attributes.AttributeContainer
 import org.gradle.api.attributes.HasAttributes
 import org.gradle.api.component.SoftwareComponent
 import org.gradle.api.publish.maven.MavenPublication
-import org.jetbrains.kotlin.gradle.PRESETS_API_IS_DEPRECATED_MESSAGE
-import org.jetbrains.kotlin.gradle.DeprecatedTargetPresetApi
-import org.jetbrains.kotlin.gradle.InternalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinGradlePluginDsl
 import org.jetbrains.kotlin.tooling.core.HasMutableExtras
 
@@ -150,16 +147,6 @@ interface KotlinTarget : Named, HasAttributes, HasProject, HasMutableExtras {
      * Configures the attributes associated with this target.
      */
     fun attributes(configure: Action<AttributeContainer>) = attributes { configure.execute(this) }
-
-    /**
-     * @suppress
-     */
-    @OptIn(DeprecatedTargetPresetApi::class, InternalKotlinGradlePluginApi::class)
-    @get:Deprecated(
-        PRESETS_API_IS_DEPRECATED_MESSAGE,
-        level = DeprecationLevel.ERROR,
-    )
-    val preset: KotlinTargetPreset<out KotlinTarget>?
 
     /**
      * @suppress
