@@ -74,6 +74,7 @@ abstract class CommonCompilerArguments : CommonToolArguments() {
     )
     @Argument(
         value = "-progressive",
+        deprecatedName = "-Xprogressive",
         description = """Enable progressive compiler mode.
 In this mode, deprecations and bug fixes for unstable code take effect immediately
 instead of going through a graceful migration cycle.
