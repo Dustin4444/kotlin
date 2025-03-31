@@ -542,7 +542,7 @@ default: 'indy-with-constants' for JVM targets 9 or greater, 'inline' otherwise.
     compilerArgument {
         name = "Xjdk-release"
         description = """Compile against the specified JDK API version, similarly to javac's '-release'. This requires JDK 9 or newer.
-The supported versions depend on the JDK used; for JDK 17+, the supported versions are 1.8 and 9–24.
+The supported versions depend on the JDK used; for JDK 17+, the supported versions are ${JvmTarget.SUPPORTED_VERSIONS_DESCRIPTION}.
 This also sets the value of '-jvm-target' to be equal to the selected JDK version.""".asReleaseDependent()
         valueType = StringType.defaultNull
         valueDescription = "<version>".asReleaseDependent()

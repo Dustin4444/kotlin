@@ -44,7 +44,6 @@ enum class JvmTarget(
         )
     );
 
-    // copied from org.jetbrains.kotlin.config.JvmTarget
     companion object {
         const val SUPPORTED_VERSIONS_DESCRIPTION = "1.8 and 9–24"
     }

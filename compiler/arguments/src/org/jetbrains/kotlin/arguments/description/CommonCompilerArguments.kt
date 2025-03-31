@@ -17,11 +17,6 @@ import org.jetbrains.kotlin.cli.common.arguments.*
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageVersion
 
-/*
- * Copyright 2010-2025 JetBrains s.r.o. and Kotlin Programming Language contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
- */
-
 val actualCommonCompilerArguments by compilerArgumentsLevel(Levels.commonCompilerArguments) {
     compilerArgument {
         name = "language-version"
@@ -72,6 +67,7 @@ val actualCommonCompilerArguments by compilerArgumentsLevel(Levels.commonCompile
 
     compilerArgument {
         name = "progressive"
+        deprecatedName = "Xprogressive"
         compilerName = "progressiveMode"
         description = """
                 Enable progressive compiler mode.
