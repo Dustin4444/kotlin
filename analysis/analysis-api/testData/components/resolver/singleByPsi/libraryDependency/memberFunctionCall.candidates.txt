@@ -1,4 +1,4 @@
-KtDotQualifiedExpression(86,103): 'bar.foo(1, "foo")'
+KtCallExpression(90,103): 'foo(1, "foo")'
   KaApplicableCallCandidateInfo:
     candidate = KaSimpleFunctionCall:
       argumentMapping = {

@@ -1,6 +1,6 @@
-KtNameReferenceExpression(86,89): 'bar'
+KtNameReferenceExpression(90,93): 'foo'
   KtSimpleNameReference:
-    (in <local>: call) val bar: Bar
+    (in Bar) fun foo(a: kotlin.Int, b: kotlin.String)
 
   SyntheticPropertyAccessorReference:
     Nothing (Unresolved reference)

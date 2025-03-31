@@ -9,5 +9,5 @@ class Bar {
 // FILE: main.kt
 fun call() {
     val bar = Bar()
-    <expr>bar.foo(1, "foo")</expr>
+    bar.<expr>foo(1, "foo")</expr>
 }
