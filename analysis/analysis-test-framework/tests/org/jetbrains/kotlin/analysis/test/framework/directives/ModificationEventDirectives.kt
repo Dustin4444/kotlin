@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.analysis.test.framework.projectStructure.KtTestModul
 import org.jetbrains.kotlin.analysis.test.framework.projectStructure.KtTestModuleStructure
 import org.jetbrains.kotlin.test.directives.model.DirectiveApplicability
 import org.jetbrains.kotlin.test.directives.model.SimpleDirectivesContainer
+import org.jetbrains.kotlin.test.directives.model.singleOrZeroValue
 import org.jetbrains.kotlin.test.testFramework.runWriteAction
 
 /**
@@ -132,12 +133,12 @@ private fun KtTestModule.publishModificationEvent(modificationEventKind: KotlinM
 }
 
 private val KtTestModule.modificationEventDirectiveTarget: ModificationEventDirectiveTarget
-    get() = testModule.directives[ModificationEventDirectives.MODIFICATION_EVENT_TARGET].singleOrNull()
+    get() = testModule.directives.singleOrZeroValue(ModificationEventDirectives.MODIFICATION_EVENT_TARGET)
         ?: ModificationEventDirectiveTarget.SELF
 
 private fun KaModule.getFallbackDependenciesModule(): KaModule {
     require(this is KaLibraryModule || this is KaLibrarySourceModule) {
-        "The MODIFICATION_EVENT_TARGET=FALLBACK_DEPENDENCIES directive can only be applied to a" +
+        "The MODIFICATION_EVENT_TARGET=${ModificationEventDirectiveTarget.FALLBACK_DEPENDENCIES.name} directive can only be applied to a" +
                 " library module or library source module, but the module '${this}' is of type `${this::class.simpleName}`."
     }
 
