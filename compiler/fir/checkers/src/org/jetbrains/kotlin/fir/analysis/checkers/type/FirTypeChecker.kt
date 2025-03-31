@@ -20,5 +20,6 @@ abstract class FirTypeChecker<in T : FirTypeRef>(final override val mppKind: Mpp
      * please write a [org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirDeclarationChecker] or
      * [org.jetbrains.kotlin.fir.analysis.checkers.expression.FirExpressionChecker] instead.
      */
-    abstract fun check(typeRef: T, context: CheckerContext, reporter: DiagnosticReporter)
+    context(context: CheckerContext, reporter: DiagnosticReporter)
+    abstract fun check(typeRef: T)
 }
