@@ -201,10 +201,9 @@ class NonLinkingIrInlineFunctionDeserializer(
             irInterner = irInterner,
         )
 
-        private val originalSignatureToPreprocessed: Map<Int, Int> =
-            fileProto.originalToPreprocessedInlineFunctionsList.filterIndexed { index, _ -> index % 2 == 0 }
-                .zip(fileProto.originalToPreprocessedInlineFunctionsList.filterIndexed { index, _ -> index % 2 != 0 })
-                .toMap()
+        private val originalSignatureToPreprocessed: Map<Int, Int> = fileProto.originalToPreprocessedInlineFunctionsList
+            .chunked(2) { it[0] to it[1] }
+            .toMap()
 
         /**
          * Deserialize declarations only on demand. Cache top-level declarations to avoid repetitive deserialization
