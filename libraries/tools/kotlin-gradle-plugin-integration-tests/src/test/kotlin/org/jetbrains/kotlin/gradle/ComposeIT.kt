@@ -34,7 +34,7 @@ class ComposeIT : KGPBaseTest() {
             projectName = "AndroidSimpleApp",
             gradleVersion = gradleVersion,
             buildJdk = providedJdk.location,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion)
+            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion).suppressWarningFromAgpWithGradle813(gradleVersion)
         ) {
             buildGradle.modify { originalBuildScript ->
                 """
@@ -143,7 +143,7 @@ class ComposeIT : KGPBaseTest() {
             projectName = "AndroidSimpleComposeApp",
             gradleVersion = gradleVersion,
             buildJdk = providedJdk.location,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion)
+            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion).suppressWarningFromAgpWithGradle813(gradleVersion)
         ) {
             build("assembleDebug") {
                 assertOutputContains("Detected Android Gradle Plugin compose compiler configuration")
@@ -259,10 +259,12 @@ class ComposeIT : KGPBaseTest() {
             projectName = "AndroidSimpleComposeApp",
             gradleVersion = gradleVersion,
             buildJdk = providedJdk.location,
-            buildOptions = defaultBuildOptions.copy(
-                androidVersion = agpVersion,
-                buildCacheEnabled = true,
-            )
+            buildOptions = defaultBuildOptions
+                .copy(
+                    androidVersion = agpVersion,
+                    buildCacheEnabled = true,
+                )
+                .suppressWarningFromAgpWithGradle813(gradleVersion)
         ) {
             projectPath.resolve("stability-configuration.conf").writeText(
                 """
@@ -300,7 +302,7 @@ class ComposeIT : KGPBaseTest() {
             projectName = "AndroidSimpleApp",
             gradleVersion = gradleVersion,
             buildJdk = providedJdk.location,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion)
+            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion).suppressWarningFromAgpWithGradle813(gradleVersion)
         ) {
             buildGradle.modify { originalBuildScript ->
                 """
@@ -352,7 +354,7 @@ class ComposeIT : KGPBaseTest() {
             projectName = "AndroidSimpleApp",
             gradleVersion = gradleVersion,
             buildJdk = providedJdk.location,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion),
+            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion).suppressWarningFromAgpWithGradle813(gradleVersion),
             dependencyManagement = DependencyManagement.DefaultDependencyManagement(
                 additionalRepos = setOf("https://androidx.dev/snapshots/builds/${composeSnapshotId}/artifacts/repository")
             )
@@ -407,7 +409,9 @@ class ComposeIT : KGPBaseTest() {
             projectName = "composeMultiModule/dep",
             gradleVersion = gradleVersion,
             buildJdk = providedJdk.location,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion, kotlinVersion = "1.9.21")
+            buildOptions = defaultBuildOptions
+                .copy(androidVersion = agpVersion, kotlinVersion = "1.9.21")
+                .suppressWarningFromAgpWithGradle813(gradleVersion)
         ) {
             val composeBase = projectPath.resolve("src/main/kotlin/com/example/Compose.kt").createFile()
             composeBase.appendText(

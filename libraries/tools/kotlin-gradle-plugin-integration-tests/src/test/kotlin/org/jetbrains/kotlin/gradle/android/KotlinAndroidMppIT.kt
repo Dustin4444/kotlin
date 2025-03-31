@@ -42,7 +42,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
             buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion),
             buildJdk = jdkVersion.location
         ) {
-            build("assembleDebug") {
+            build("assembleDebug", buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)) {
                 assertTasksAreNotInTaskGraph(":${BuildKotlinToolingMetadataTask.defaultTaskName}")
 
                 val debugApk = projectPath.resolve("build/outputs/apk/debug/project-debug.apk")
@@ -82,7 +82,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
             ),
             buildJdk = jdkVersion.location
         ) {
-            build("sourceSets") {
+            build("sourceSets", buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)) {
                 fun assertOutputContainsOsIndependent(expectedString: String) {
                     assertOutputContains(expectedString.replace("/", File.separator))
                 }
@@ -154,7 +154,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
             buildJdk = jdkVersion.location
         ) {
             val groupDir = subProject("lib").projectPath.resolve("build/repo/com/example")
-            build("publish") {
+            build("publish", buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)) {
                 assertDirectoryExists(groupDir.resolve("lib-jvmlib"))
                 assertDirectoryExists(groupDir.resolve("lib-jslib"))
                 assertDirectoryExists(groupDir.resolve("lib-androidlib"))
@@ -448,7 +448,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
                         }                        
                         """.trimIndent()
             }
-            build("publish") {
+            build("publish", buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)) {
                 listOf("foobar", "foobaz").forEach { flavor ->
                     listOf("-debug", "").forEach { buildType ->
                         assertFileExists(appGroupDir.resolve("app-androidapp-$flavor$buildType/1.0/app-androidapp-$flavor$buildType-1.0.aar"))
@@ -506,7 +506,8 @@ class KotlinAndroidMppIT : KGPBaseTest() {
             "new-mpp-android",
             gradleVersion,
             buildOptions = defaultBuildOptions
-                .copy(androidVersion = agpVersion),
+                .copy(androidVersion = agpVersion)
+                .suppressWarningFromAgpWithGradle813(gradleVersion),
             buildJdk = jdkVersion.location
         ) {
             settingsGradle.replaceText("include ':app', ':lib'", "include ':lib'")
@@ -625,7 +626,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
         project(
             "new-mpp-android",
             gradleVersion,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion),
+            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion).suppressWarningFromAgpWithGradle813(gradleVersion),
             buildJdk = jdkVersion.location
         ) {
             // Test the fix for KT-29343
@@ -792,7 +793,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
         project(
             "AndroidProject",
             gradleVersion,
-            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion),
+            buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion).suppressWarningFromAgpWithGradle813(gradleVersion),
             buildJdk = jdkVersion.location
         ) {
             includeOtherProjectAsSubmodule(pathPrefix = "new-mpp-lib-and-app", otherProjectName = "sample-lib")
@@ -912,7 +913,10 @@ class KotlinAndroidMppIT : KGPBaseTest() {
                 Project: multiplatformAndroidConsumer is a mpp project with jvm and android targets.
                 This project depends on the previous publication as 'commonMainImplementation' dependency
                 */
-                build(":multiplatformAndroidConsumer:assemble")
+                build(
+                    ":multiplatformAndroidConsumer:assemble",
+                    buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)
+                )
 
                 /*
                 Project: plainAndroidConsumer only uses the 'kotlin("android")' plugin
@@ -940,7 +944,11 @@ class KotlinAndroidMppIT : KGPBaseTest() {
             buildOptions = defaultBuildOptions.copy(androidVersion = agpVersion),
             buildJdk = jdkVersion.location
         ) {
-            build(":compileDebugUnitTestKotlinAndroid", ":compileReleaseUnitTestKotlinAndroid") {
+            build(
+                ":compileDebugUnitTestKotlinAndroid",
+                ":compileReleaseUnitTestKotlinAndroid",
+                buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)
+            ) {
                 assertTasksExecuted(
                     ":compileDebugKotlinAndroid",
                     ":compileReleaseKotlinAndroid",
@@ -1049,7 +1057,7 @@ class KotlinAndroidMppIT : KGPBaseTest() {
                 }
             }
 
-            build("publish") {
+            build("publish", buildOptions = buildOptions.suppressWarningFromAgpWithGradle813(gradleVersion)) {
                 if (agpVersion == TestVersions.AGP.AGP_73) {
                     // AGP 7.3 configures Publication automatically, so no diagnostic should be reported
                     assertNoDiagnostic(KotlinToolingDiagnostics.AndroidPublicationNotConfigured)
