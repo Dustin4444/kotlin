@@ -1,4 +1,5 @@
-// IGNORE_BACKEND_K2: ANY
+// DUMP_IR
+// ^KT-63348: The type of the initializer of the temporary variable for the when subject is incorrect.
 sealed interface OperandType<J> {
     fun operand1(instruction: OneOperand<*, *>): J = instruction.operand1 as J
 }

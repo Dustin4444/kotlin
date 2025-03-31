@@ -1451,7 +1451,11 @@ class Fir2IrVisitor(
         return when {
             subjectVariable != null && !subjectVariable.isImplicitWhenSubjectVariable -> subjectVariable.accept(this, null) as IrVariable
             subjectExpression != null ->
-                conversionScope.scope().createTemporaryVariable(convertToIrExpression(subjectExpression), "subject")
+                conversionScope.scope().createTemporaryVariable(
+                    irExpression = convertToIrExpression(subjectExpression),
+                    nameHint = "subject",
+                    irType = subjectVariable?.returnTypeRef?.coneType?.toIrType(this)
+                )
             else -> null
         }
     }
@@ -1549,6 +1553,7 @@ class Fir2IrVisitor(
                                     isUnnamedLocalVar -> conversionScope.scope().createTemporaryVariable(
                                         convertToIrExpression(firLoopVarStmt.initializer!!),
                                         nameHint = "forLoopVariable",
+                                        irType = firLoopVarStmt.returnTypeRef.coneType.toIrType(this@Fir2IrVisitor),
                                     )
                                     else -> firLoopVarStmt.toIrStatement()
                                 }
