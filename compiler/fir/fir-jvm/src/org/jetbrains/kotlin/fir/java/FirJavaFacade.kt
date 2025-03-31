@@ -136,7 +136,6 @@ abstract class FirJavaFacade(session: FirSession, private val classFinder: JavaC
     ): FirJavaClass {
         val moduleData = getModuleDataForClass(javaClass)
         val session = moduleData.session
-        val fakeSource = javaClass.toSourceElement()?.fakeElement(KtFakeSourceElementKind.Enhancement)
         return buildJavaClass {
             this.javaClass = javaClass
             containingClassSymbol = parentClassSymbol
