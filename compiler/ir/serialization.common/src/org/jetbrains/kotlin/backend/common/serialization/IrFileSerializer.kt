@@ -1126,7 +1126,7 @@ open class IrFileSerializer(
         return with(ProtoDeclarationBase.newBuilder()) {
             symbol = serializeIrSymbol(
                 (declaration as IrSymbolOwner).symbol,
-                isDeclared = declaration !in originalToPreprocessedInlineFunctions
+                isDeclared = declaration !in originalToPreprocessedInlineFunctions.values
             )
             coordinates = serializeCoordinates(declaration.startOffset, declaration.endOffset)
             addAllAnnotation(serializeAnnotations(declaration.annotations))
