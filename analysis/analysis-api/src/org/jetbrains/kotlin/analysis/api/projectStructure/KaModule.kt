@@ -234,8 +234,8 @@ public interface KaLibraryModule : KaModule {
  * For example, when viewing a library file in an IDE, the library sources are usually preferred over the library's binary files (if
  * available). The [KaLibrarySourceModule] represents exactly such sources.
  *
- * The library source module's dependencies should be the same as its [binaryLibrary]'s dependencies. In particular, the library source
- * module also needs to depend on a single [KaLibraryFallbackDependenciesModule] if its exact dependencies are unknown.
+ * The library source module's dependencies must be the same as its [binaryLibrary]'s dependencies. In particular, the library source module
+ * must also depend on a single [KaLibraryFallbackDependenciesModule] if its exact dependencies are unknown.
  */
 public interface KaLibrarySourceModule : KaModule {
     /**
