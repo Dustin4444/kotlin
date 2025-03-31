@@ -11,11 +11,9 @@ import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrParameterKind
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
-import org.jetbrains.kotlin.ir.declarations.IrTypeParametersContainer
-import org.jetbrains.kotlin.ir.overrides.isEffectivelyPrivate
+import org.jetbrains.kotlin.ir.types.extractTypeParameters
 import org.jetbrains.kotlin.ir.util.erasedTopLevelCopy
 import org.jetbrains.kotlin.ir.util.file
-import org.jetbrains.kotlin.ir.util.parentsWithSelf
 import org.jetbrains.kotlin.ir.visitors.IrVisitorVoid
 import org.jetbrains.kotlin.ir.visitors.acceptChildrenVoid
 
@@ -30,12 +28,12 @@ class InlineFunctionSerializationPreProcessing(private val context: LoweringCont
     }
 
     override fun visitSimpleFunction(declaration: IrSimpleFunction) {
-        if (!declaration.isInline || declaration.body == null || declaration.isEffectivelyPrivate()) return
+        if (!declaration.isInline || declaration.body == null || declaration.symbol.isConsideredAsPrivateForInlining()) return
         declaration.erasedTopLevelCopy = declaration.eraseTypeParameters().convertToTopLevel()
     }
 
     private fun IrSimpleFunction.eraseTypeParameters(): IrSimpleFunction {
-        val typeArguments = parentsWithSelf.flatMap { (it as? IrTypeParametersContainer)?.typeParameters ?: emptyList() }
+        val typeArguments = extractTypeParameters(this)
             .associate { it.symbol to (if (it.isReified) null else context.irBuiltIns.anyNType) }
         return InlineFunctionBodyPreprocessor(typeArguments, parent).preprocess(this) as IrSimpleFunction
     }
