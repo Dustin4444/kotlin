@@ -58547,6 +58547,12 @@ public class PhasedJvmDiagnosticPsiTestGenerated extends AbstractPhasedJvmDiagno
       }
 
       @Test
+      @TestMetadata("typeAnnotationArgument.kt")
+      public void testTypeAnnotationArgument() {
+        runTest("compiler/fir/analysis-tests/testData/resolveWithStdlib/problems/typeAnnotationArgument.kt");
+      }
+
+      @Test
       @TestMetadata("TypeVariablesInWrappedSamCall.kt")
       public void testTypeVariablesInWrappedSamCall() {
         runTest("compiler/fir/analysis-tests/testData/resolveWithStdlib/problems/TypeVariablesInWrappedSamCall.kt");
