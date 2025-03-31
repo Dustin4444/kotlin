@@ -66,7 +66,7 @@ private fun checkClashWithInvisibleProperty(
     val scope = dispatchReceiver.resolvedType.scope(
         context.session,
         context.scopeSession,
-        CallableCopyTypeCalculator.Forced,
+        CallableCopyTypeCalculator.CalculateDeferredForceLazyResolution,
         requiredMembersPhase = null
     ) ?: return
     val properties = scope.getProperties(fieldSymbol.name)

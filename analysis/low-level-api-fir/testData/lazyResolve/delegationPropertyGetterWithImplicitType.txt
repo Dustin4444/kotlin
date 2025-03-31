@@ -1,12 +1,15 @@
 STATUS:
-TARGET: public [ResolvedTo(STATUS)] get(): <implicit>
+TARGET: public [ResolvedTo(STATUS)] get(): R|kotlin/String?|
 FILE: [ResolvedTo(IMPORTS)] delegationPropertyGetterWithImplicitType.kt
     public abstract [ResolvedTo(STATUS)] interface A<[ResolvedTo(STATUS)] T> : R|kotlin/Any| {
-        public open [ResolvedTo(STATUS)] var result: <implicit>
-            public [ResolvedTo(STATUS)] [ContainingClassKey=A] get(): <implicit> { LAZY_BLOCK }
-            public [ResolvedTo(STATUS)] [ContainingClassKey=A] set([ResolvedTo(STATUS)] value: <implicit>): R|kotlin/Unit| { LAZY_BLOCK }
+        public open [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] var result: R|T?|
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [ContainingClassKey=A] get(): R|T?| {
+                ^ this@R|/A|.R|/A.get|()
+            }
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [ContainingClassKey=A] set([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] value: R|T?|): R|kotlin/Unit| {
+            }
 
-        public open [ResolvedTo(STATUS)] fun get(): R|T?| { LAZY_BLOCK }
+        public open [ResolvedTo(CONTRACTS)] fun get(): R|T?| { LAZY_BLOCK }
 
     }
     public final [ResolvedTo(STATUS)] [DelegateFieldsMapKey={0=FirFieldSymbol /B.$$delegate_0}] class B : R|A<kotlin/String>| {
@@ -19,14 +22,17 @@ FILE: [ResolvedTo(IMPORTS)] delegationPropertyGetterWithImplicitType.kt
     }
 
 EXPECT_ACTUAL_MATCHING:
-TARGET: public [ResolvedTo(EXPECT_ACTUAL_MATCHING)] get(): <implicit>
+TARGET: public [ResolvedTo(EXPECT_ACTUAL_MATCHING)] get(): R|kotlin/String?|
 FILE: [ResolvedTo(IMPORTS)] delegationPropertyGetterWithImplicitType.kt
     public abstract [ResolvedTo(STATUS)] interface A<[ResolvedTo(STATUS)] T> : R|kotlin/Any| {
-        public open [ResolvedTo(EXPECT_ACTUAL_MATCHING)] var result: <implicit>
-            public [ResolvedTo(EXPECT_ACTUAL_MATCHING)] [ContainingClassKey=A] get(): <implicit> { LAZY_BLOCK }
-            public [ResolvedTo(EXPECT_ACTUAL_MATCHING)] [ContainingClassKey=A] set([ResolvedTo(EXPECT_ACTUAL_MATCHING)] value: <implicit>): R|kotlin/Unit| { LAZY_BLOCK }
+        public open [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] var result: R|T?|
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [ContainingClassKey=A] get(): R|T?| {
+                ^ this@R|/A|.R|/A.get|()
+            }
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [ContainingClassKey=A] set([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] value: R|T?|): R|kotlin/Unit| {
+            }
 
-        public open [ResolvedTo(STATUS)] fun get(): R|T?| { LAZY_BLOCK }
+        public open [ResolvedTo(CONTRACTS)] fun get(): R|T?| { LAZY_BLOCK }
 
     }
     public final [ResolvedTo(STATUS)] [DelegateFieldsMapKey={0=FirFieldSymbol /B.$$delegate_0}] class B : R|A<kotlin/String>| {
@@ -39,14 +45,17 @@ FILE: [ResolvedTo(IMPORTS)] delegationPropertyGetterWithImplicitType.kt
     }
 
 CONTRACTS:
-TARGET: public [ResolvedTo(CONTRACTS)] get(): <implicit>
+TARGET: public [ResolvedTo(CONTRACTS)] get(): R|kotlin/String?|
 FILE: [ResolvedTo(IMPORTS)] delegationPropertyGetterWithImplicitType.kt
     public abstract [ResolvedTo(STATUS)] interface A<[ResolvedTo(STATUS)] T> : R|kotlin/Any| {
-        public open [ResolvedTo(CONTRACTS)] var result: <implicit>
-            public [ResolvedTo(CONTRACTS)] [ContainingClassKey=A] get(): <implicit> { LAZY_BLOCK }
-            public [ResolvedTo(CONTRACTS)] [ContainingClassKey=A] set([ResolvedTo(CONTRACTS)] value: <implicit>): R|kotlin/Unit| { LAZY_BLOCK }
+        public open [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] var result: R|T?|
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [ContainingClassKey=A] get(): R|T?| {
+                ^ this@R|/A|.R|/A.get|()
+            }
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [ContainingClassKey=A] set([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] value: R|T?|): R|kotlin/Unit| {
+            }
 
-        public open [ResolvedTo(STATUS)] fun get(): R|T?| { LAZY_BLOCK }
+        public open [ResolvedTo(CONTRACTS)] fun get(): R|T?| { LAZY_BLOCK }
 
     }
     public final [ResolvedTo(STATUS)] [DelegateFieldsMapKey={0=FirFieldSymbol /B.$$delegate_0}] class B : R|A<kotlin/String>| {

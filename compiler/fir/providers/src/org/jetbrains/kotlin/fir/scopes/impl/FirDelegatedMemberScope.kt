@@ -57,7 +57,7 @@ class FirDelegatedMemberScope(
     private fun buildScope(delegateField: FirField): FirTypeScope? = delegateField.symbol.resolvedReturnType.scope(
         session,
         scopeSession,
-        CallableCopyTypeCalculator.Forced,
+        CallableCopyTypeCalculator.CalculateDeferredForceLazyResolution,
         requiredMembersPhase = null,
     )
 
