@@ -12,7 +12,7 @@
     <properties>
         <kotlin.compiler.jdkHome>${kotlinCompilerJdk}</kotlin.compiler.jdkHome>
         <junit.version>4.13.1</junit.version>
-        <dagger.version>2.9</dagger.version>
+        <dagger.version>2.56.2</dagger.version>
         <main.class>coffee.CoffeeApp</main.class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
