@@ -119,7 +119,7 @@
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>13.0</version>
+      <version>26.0.2</version>
     </dependency>
 
     <!-- Compiler plugins. They can be added to the JPS process via KOTLIN_BUNDLED Path Variable -->
